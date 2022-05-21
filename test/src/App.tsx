@@ -3,8 +3,35 @@ import logo from './logo.svg';
 import './App.css';
 import { Card, CardContent, Grid, Typography } from '@mui/material';
 import { makeStyles } from '@material-ui/core';
+import { mockCity } from './common/mockCity';
+
+const useStyle = makeStyles({
+  root: {
+
+  },
+  "&.MuiCard-root": {
+    borderRadius: "none"
+  },
+  activeCity: {
+    background: "radial-gradient(circle, #011354 0%, #5B9FE3 100%)",
+    boxShadow: "5px 10px 20px 0 rgba(0,0,0,0.5)",
+    borderRadius: "25px",
+    width: 374, height: 140, backgroundColor: "none", overflow: "none",
+    margin: "10px"
+  },
+  disabledCity: {
+    background: "radial-gradient(circle, #464C64 0%, #99A9B9 100%)",
+    boxShadow: "5px 10px 20px 0 rgba(0,0,0,0.5)",
+    borderRadius: "25px",
+    width: 374, height: 140, backgroundColor: "none", overflow: "none",
+    margin: "10px"
+
+  }
+
+});
 
 function App() {
+  const style = useStyle();
 
   return (
     <div style={{ display: "flex", flexWrap: "wrap", flexFlow: "row wrap", padding: "30px", justifyContent: "space-around" }}>
@@ -33,30 +60,36 @@ function App() {
 
       </Card>
 
-      <div style={{ display: "flex", margin: "20px", flex: "25%",justifyContent:"flex-end" }}>
-        <Card sx={{ width: 374, height: 180 }} style={{
-          boxShadow: "5px 10px 20px 0 rgba(0,0,0,0.5)",
-          borderRadius: "25px",
-          background: "radial-gradient(circle, #5374E7 0%, #77B9F5 100%",
-        }}>
-          <CardContent>
-            <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
-              Word of the Day
-            </Typography>
-            <Typography variant="h5" component="div">
+      <div style={{ height: "400px", display: "flex", margin: "20px", flex: "25%", flexFlow: "row wrap", overflowY: "auto" }}>
+        {mockCity.map((el: any) => (
 
-            </Typography>
-            <Typography sx={{ mb: 1.5 }} color="text.secondary">
-              adjective
-            </Typography>
-            <Typography variant="body2">
-              well meaning and kindly.
-              <br />
-              {'"a benevolent smile"'}
-            </Typography>
-          </CardContent>
+          <Card style={{ borderRadius: "25px" }} className={el.active ? style.activeCity : style.disabledCity}>
 
-        </Card>
+            <CardContent style={{display:"flex",justifyContent:"space-around"}}>
+
+              <div> <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom style={{ display: "flex" }}>
+                citta
+              </Typography></div>
+              <div>
+                <Typography variant="h5" component="div">
+                  icona meteo
+                </Typography>
+              </div>
+
+
+              
+              <div >
+              <Typography sx={{ mb: 1.5 }} color="text.secondary">
+               gradi
+              </Typography>
+              </div>
+            </CardContent>
+
+          </Card>
+
+
+        ))}
+
       </div>
 
 
@@ -108,7 +141,9 @@ function App() {
 
       </Card>
 
-      <div style={{ display: "flex", margin: "20px", flex: "25%",justifyContent:"flex-end" }}>
+
+      <div style={{ display: "flex", margin: "20px", flex: "25%", flexFlow: "column wrap", }}>
+        <Typography>Localization</Typography>
         <Card sx={{ width: 374, height: 140 }} style={{
           boxShadow: "5px 10px 20px 0 rgba(0,0,0,0.5)",
           borderRadius: "25px",
