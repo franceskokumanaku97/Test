@@ -5,6 +5,7 @@ import { Card, CardContent, Grid, Typography } from '@mui/material';
 import { makeStyles } from '@material-ui/core';
 import { mockCity } from './common/mockCity';
 
+
 const useStyle = makeStyles({
   root: {
 
@@ -26,6 +27,16 @@ const useStyle = makeStyles({
     width: 374, height: 140, backgroundColor: "none", overflow: "none",
     margin: "10px"
 
+  },
+  cityLabel: {
+    height: "36px",
+    width: "98px",
+    color: "#FFFFFF",
+    fontFamily: "Poppins",
+    fontSize: "26px",
+    fontWeight: 600,
+    letterSpacing: "0",
+    lineHeight: "39px",
   }
 
 });
@@ -65,11 +76,11 @@ function App() {
 
           <Card style={{ borderRadius: "25px" }} className={el.active ? style.activeCity : style.disabledCity}>
 
-            <CardContent style={{display:"flex",justifyContent:"space-around"}}>
+            <CardContent style={{ display: "flex", justifyContent: "space-around" }}>
 
-              <div> <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom style={{ display: "flex" }}>
-                citta
-              </Typography></div>
+              <div> <p className={style.cityLabel}>
+                {el.label}
+              </p></div>
               <div>
                 <Typography variant="h5" component="div">
                   icona meteo
@@ -77,11 +88,11 @@ function App() {
               </div>
 
 
-              
+
               <div >
-              <Typography sx={{ mb: 1.5 }} color="text.secondary">
-               gradi
-              </Typography>
+                <Typography sx={{ mb: 1.5 }} color="text.secondary">
+                  gradi
+                </Typography>
               </div>
             </CardContent>
 
