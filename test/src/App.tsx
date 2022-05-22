@@ -1,7 +1,7 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import logo from './logo.svg';
 import './App.css';
-import { Card, CardContent, Grid, Typography } from '@mui/material';
+import { Card, CardContent, Grid, TextField, Typography } from '@mui/material';
 import { makeStyles } from '@material-ui/core';
 import { mockCity } from './common/mockCity';
 
@@ -14,6 +14,13 @@ const useStyle = makeStyles({
     borderRadius: "none"
   },
   activeCity: {
+    background: "radial-gradient(circle, #011354 0%, #5B9FE3 100%)",
+    boxShadow: "5px 10px 20px 0 rgba(0,0,0,0.5)",
+    borderRadius: "25px",
+    width: 374, height: 140, backgroundColor: "none", overflow: "none",
+    margin: "10px"
+  },
+  inputCity: {
     background: "radial-gradient(circle, #011354 0%, #5B9FE3 100%)",
     boxShadow: "5px 10px 20px 0 rgba(0,0,0,0.5)",
     borderRadius: "25px",
@@ -42,6 +49,10 @@ const useStyle = makeStyles({
 });
 
 function App() {
+
+  useEffect(() => {
+
+  }, [])
   const style = useStyle();
 
   return (
@@ -71,37 +82,51 @@ function App() {
 
       </Card>
 
-      <div style={{ height: "400px", display: "flex", margin: "20px", flex: "25%", flexFlow: "row wrap", overflowY: "auto" }}>
-        {mockCity.map((el: any) => (
 
-          <Card style={{ borderRadius: "25px" }} className={el.active ? style.activeCity : style.disabledCity}>
-
-            <CardContent style={{ display: "flex", justifyContent: "space-around" }}>
-
-              <div> <p className={style.cityLabel}>
-                {el.label}
-              </p></div>
-              <div>
-                <Typography variant="h5" component="div">
-                  icona meteo
-                </Typography>
-              </div>
+      <div style={{ margin: "20px", flex: "25%", flexFlow: "column wrap",display:"flex" }}>
 
 
 
-              <div >
-                <Typography sx={{ mb: 1.5 }} color="text.secondary">
-                  gradi
-                </Typography>
-              </div>
-            </CardContent>
 
-          </Card>
+        <TextField id="outlined-basic" label="Outlined" variant="outlined" />
 
 
-        ))}
 
+        <div style={{ height: "400px", margin: "20px",overflowY:"auto" }}>
+
+          {mockCity.map((el: any) => (
+
+            <Card style={{ borderRadius: "25px" }} className={el.active ? style.activeCity : style.disabledCity}>
+
+              <CardContent style={{ display: "flex", justifyContent: "space-around" }}>
+
+                <div> <p className={style.cityLabel}>
+                  {el.label}
+                </p></div>
+                <div>
+                  <Typography variant="h5" component="div">
+                    icona meteo
+                  </Typography>
+                </div>
+
+
+
+                <div >
+                  <Typography sx={{ mb: 1.5 }} color="text.secondary">
+                    gradi
+                  </Typography>
+                </div>
+              </CardContent>
+
+            </Card>
+
+
+          ))}
+
+        </div>
       </div>
+
+
 
 
       <Card sx={{ width: 302, height: 385 }} style={{
