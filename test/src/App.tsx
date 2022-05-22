@@ -70,7 +70,21 @@ function App() {
 
   }
 
+  // async function weatherData(e) {
+  //   e.preventDefault();
+  //   if (form.city == "") {
+  //     alert("Add values");
+  //   } else {
+  //     const data = await fetch(
+  //       `https://api.openweathermap.org/data/2.5/weather?q=${form.city},${form.country}&APPID=${APIKEY}`
+  //     )
+  //       .then((res) => res.json())
+  //       .then((data) => data);
 
+  //     setWeather({ data: data });
+  //   }
+
+  
   useEffect(() => {
     weatherData();
   }, [])
