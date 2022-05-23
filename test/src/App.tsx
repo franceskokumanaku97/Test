@@ -1,10 +1,11 @@
 import { makeStyles } from '@material-ui/core';
 import AddBoxOutlinedIcon from '@mui/icons-material/AddBoxOutlined';
-import { Card, CardContent, InputAdornment, styled, TextField, Typography } from '@mui/material';
-import { useEffect } from 'react';
+import { Box, Card, CardContent, InputAdornment, styled, Tab, Tabs, TextField, Typography } from '@mui/material';
+import moment from 'moment';
+import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import './App.css';
-import { getLastValuesWheater, selectAllWeatherCity } from './app/slice';
+import { getLastValuesWheater, IlistTemPerH, IWeather, selectAllWeatherCity } from './app/slice';
 import { AppDispatch } from './app/store';
 import CityWeather from './common/components/cityWeather';
 import { mockCity } from './common/mockCity';
@@ -91,8 +92,7 @@ const useStyle = makeStyles({
     lineHeight: "18px",
   },
   tempLabel: {
-    height: "71px",
-    width: "74px",
+
     color: "#FFFFFF",
     fontFamily: "Poppins",
     fontSize: "50px",
@@ -103,17 +103,125 @@ const useStyle = makeStyles({
     margin: 0
   },
   labelDiv: {
-    height: "36px",
-    width: "98px",
+
     color: "#01175F",
     fontFamily: "Poppins",
     fontSize: "26px",
     fontWeight: 600,
     letterSpacing: "0",
     lineHeight: "39px",
-  }
+  },
+  datpropsabprops: {
+
+    color: "#FFFFFF",
+    fontFamily: "Poppins",
+    fontSize: "50px",
+    fontWeight: "bold",
+    letterSpacing: 0,
+    lineHeight: "76px",
+    textAlign: "right",
+    margin: 0
+  },
+  tempLabprops: {
+    color: "#FFFFFF",
+    fontFamily: "Poppins",
+    fontSize: "26px",
+    fontWeight: 600,
+    letterSpacing: "0",
+    lineHeight: "39px",
+    margin: 0
+  },
 
 });
+
+
+
+const AntTabs = styled(Tabs)({
+  ".MuiButtonBase-root": { textTransform: "none", },
+  '& .MuiTabs-indicator': {
+
+  },
+  '& .MuiTabs-flexContainer': {
+    backgroundColor: "#FFFFFF",
+    borderRadius: "35px 35px 0 0 "
+  },
+  '& .MuiTab-textColorPrimary': {
+    color: " #01175F",
+  },
+  '& .MuiButtonBase-root': {
+    fontFamily: "Poppins",
+    fontSize: "28px",
+    fontWeight: 600,
+    letterSpacing: 0,
+    lineHeight: "42px",
+  },
+  '& .Mui-selected': {
+    color: " #FFF !important",
+    background: "radial-gradient(circle, #5374E7 0%, #77B9F5 100%)",
+    borderRadius: "35px 35px 0 0"
+  }
+});
+
+function TabPanel(props: TabPanelProps) {
+  const { children, value, index,dataWeatherCity, ...other } = props;
+  const style = useStyle();
+
+  return (
+    <div
+      role="tabpanel"
+      hidden={value !== index}
+      id={`simple-tabpanel-${index}`}
+      aria-labelledby={`simple-tab-${index}`}
+      style={{
+        display: "flex",
+        overflowY: "auto",
+        height: "80%",
+        flexFlow: "column wrap",
+        flex: "10%"
+      }}
+      {...other}
+    >
+      {value === index && (
+         dataWeatherCity !== null && dataWeatherCity?.map((el: IWeather) =>
+          el.listTemPerH.map((x: IlistTemPerH) => (
+            <>
+              <CardContent sx={{
+                margin: "20px", display: "flex", flexFlow: "column wrap", alignItems: "center",
+                height: "305px",
+                width: "148px",
+                borderRadius: "20px",
+                backgroundColor: "rgba(255,255,255,0.1)",
+                boxShadow: "5px 10px 20px 0 rgba(0,0,0,0.17)",
+              }}>
+                <p className={style.tempLabprops}>{moment(x.date).format("dddd")}</p>
+                <p className={style.tempLabprops}>{moment(x.date).format("h:mm")}</p>
+                <p className={style.datpropsabprops}>{x.temp}</p>
+                <img style={{ height: "103px", width: "90px" }} src={`http://openweathermap.org/img/w/${el.icon}.png`}></img>
+
+              </CardContent>
+            </>
+          ))
+
+        )
+      )}
+    </div>
+  );
+}
+
+function a11yProps(index: number) {
+  return {
+    id: `simple-tab-${index}`,
+    'aria-controls': `simple-tabpanel-${index}`,
+  };
+}
+
+interface TabPanelProps {
+  children?: React.ReactNode;
+  index: number;
+  value: number;
+  dataWeatherCity:IWeather[];
+}
+
 
 function App() {
 
@@ -130,7 +238,16 @@ function App() {
 
   const dataWeatherCity = useSelector(selectAllWeatherCity)
 
+  useEffect(() => { console.log(dataWeatherCity) }, [dataWeatherCity])
+
   const style = useStyle();
+
+  const [value, setValue] = useState(0);
+
+  const handleChange = (event: React.SyntheticEvent, newValue: number) => {
+    console.log("newValue", newValue)
+    setValue(newValue);
+  };
 
   return (
 
@@ -214,32 +331,92 @@ function App() {
           </Card>
         </div>
 
-        <Card sx={{ width: 564, height: 464 }} style={{
+
+        <div style={{
           boxShadow: "5px 10px 20px 0 rgba(0,0,0,0.5)",
-          borderRadius: "25px",
-          background: "radial-gradient(circle, #5374E7 0%, #77B9F5 100%"
+          borderRadius: "35px",
+          background: "radial-gradient(circle, #5374E7 0%, #77B9F5 100%)"
+
         }}>
-          <CardContent>
-            <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
-              Word of the Day
-            </Typography>
-            <Typography variant="h5" component="div">
+          <Box sx={{ width: 564, height: 464 }} style={{ backgroundColor: "none", alignItems: "center" }}>
+            <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
+              <AntTabs value={value} onChange={handleChange} >
+                <Tab label="This week" id={`simple-tab-0`} />
+                <Tab label="This month" id={`simple-tab-1`} />
+              </AntTabs>
+            </Box>
+            <TabPanel value={value} index={0} dataWeatherCity={dataWeatherCity || []}>
 
-            </Typography>
-            <Typography sx={{ mb: 1.5 }} color="text.secondary">
-              adjective
-            </Typography>
-            <Typography variant="body2">
-              well meaning and kindly.
-              <br />
-              {'"a benevolent smile"'}
-            </Typography>
-          </CardContent>
+            </TabPanel>
+            {/* <div
+              role="tabpanel"
+              hidden={value !== 0}
+              id={`simple-tabpanel-0`}
+              aria-labelledby={`simple-tab-0`}
+              style={{
+                display: "flex",
+                overflowY: "auto",
+                height: "80%",
+                flexFlow: "column wrap",
+                flex: "10%"
+              }}
+            >
+              {dataWeatherCity !== null && dataWeatherCity?.map((el: IWeather) =>
+                el.listTemPerH.map((x: IlistTemPerH) => (
+                  <>
+                    <CardContent sx={{
+                      margin: "20px", display: "flex", flexFlow: "column wrap", alignItems: "center",
+                      height: "305px",
+                      width: "148px",
+                      borderRadius: "20px",
+                      backgroundColor: "rgba(255,255,255,0.1)",
+                      boxShadow: "5px 10px 20px 0 rgba(0,0,0,0.17)",
+                    }}>
+                      <p className={style.tempLabprops}>{moment(x.date).format("dddd")}</p>
+                      <p className={style.tempLabprops}>{moment(x.date).format("h:mm")}</p>
+                      <p className={style.datpropsabprops}>{x.temp}</p>
+                      <img style={{ height: "103px", width: "90px" }} src={`http://openweathermap.org/img/w/${el.icon}.png`}></img>
 
-        </Card>
+                    </CardContent>
+                  </>
+                ))
+
+              )}
+            </div> */}
+            {/* <div
+              role="tabpanel"
+              hidden={false}
+              id={`simple-tabpanel-1`}
+              aria-labelledby={`simple-tab-1`}
+              style={{
+                display: "flex",
+                overflowY: "auto",
+                height: "80%",
+                flexFlow: "column wrap",
+                flex: "10%"
+              }}
+            >
+              prova
+            </div> */}
+          </Box>
+        </div>
+
+
 
 
         <div  >
+          <p className={style.labelDiv}>Search</p>
+          <Card sx={{ width: 374, height: 140 }} style={{
+            boxShadow: "5px 10px 20px 0 rgba(0,0,0,0.5)",
+            borderRadius: "25px",
+            background: "#FFF"
+          }}>
+            <CardContent>
+
+            </CardContent>
+
+          </Card>
+
           <p className={style.labelDiv}>Localization</p>
           <Card sx={{ width: 374, height: 140 }} style={{
             boxShadow: "5px 10px 20px 0 rgba(0,0,0,0.5)",
@@ -247,25 +424,12 @@ function App() {
             background: "radial-gradient(circle, #5374E7 0%, #77B9F5 100%"
           }}>
             <CardContent>
-              <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
-                Word of the Day
-              </Typography>
-              <Typography variant="h5" component="div">
 
-              </Typography>
-              <Typography sx={{ mb: 1.5 }} color="text.secondary">
-                adjective
-              </Typography>
-              <Typography variant="body2">
-                well meaning and kindly.
-                <br />
-                {'"a benevolent smile"'}
-              </Typography>
             </CardContent>
 
           </Card>
         </div>
-      </div>
+      </div >
     </>
   );
 }
