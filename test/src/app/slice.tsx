@@ -79,7 +79,7 @@ export const weatherCitySlice = createSlice({
                     "icon": action.payload.list[0].weather[0].icon,
                     "active": action.payload.city.name === "Bologna" ? false : true,
                     "temp": String(Math.round(action.payload.list[0].main.temp)) + "°",
-                    "listTemPerH": action.payload.list.filter((x:any)=>).map((el: any, idx: number) => {
+                    "listTemPerH": action.payload.list.map((el: any, idx: number) => {
                         return {
                             "date": el.dt_txt,
                             "icon": el.weather[0].icon,
