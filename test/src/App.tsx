@@ -1,11 +1,12 @@
 import { makeStyles } from '@material-ui/core';
 import AddBoxOutlinedIcon from '@mui/icons-material/AddBoxOutlined';
 import { Card, CardContent, InputAdornment, styled, TextField, Typography } from '@mui/material';
-import { useEffect, useState } from 'react';
-import { useDispatch } from 'react-redux';
+import { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import './App.css';
-import { getLastValuesWheater } from './app/slice';
+import { getLastValuesWheater, selectAllWeatherCity } from './app/slice';
 import { AppDispatch } from './app/store';
+import CityWeather from './common/components/cityWeather';
 import { mockCity } from './common/mockCity';
 
 
@@ -52,22 +53,18 @@ const useStyle = makeStyles({
 
   activeCity: {
     background: "radial-gradient(circle, #011354 0%, #5B9FE3 100%)",
-    boxShadow: "5px 10px 20px 0 rgba(0,0,0,0.5)",
+    boxShadow: "5px 10px 20px 0 rgba(0,0,0,0.17)",
     borderRadius: "25px",
     width: 374, height: 140, backgroundColor: "none", overflow: "none",
     margin: "10px"
   },
   inputCity: {
     background: "radial-gradient(circle, #011354 0%, #5B9FE3 100%)",
-    boxShadow: "5px 10px 20px 0 rgba(0,0,0,0.5)",
-    borderRadius: "25px",
     width: 374, height: 140, backgroundColor: "none", overflow: "none",
     margin: "10px"
   },
   disabledCity: {
     background: "radial-gradient(circle, #464C64 0%, #99A9B9 100%)",
-    boxShadow: "5px 10px 20px 0 rgba(0,0,0,0.5)",
-    borderRadius: "25px",
     width: 374, height: 140, backgroundColor: "none", overflow: "none",
     margin: "10px"
 
@@ -81,6 +78,29 @@ const useStyle = makeStyles({
     fontWeight: 600,
     letterSpacing: "0",
     lineHeight: "39px",
+    margin: 0
+  },
+  dateLabel: {
+    height: "36px",
+    width: "84px",
+    color: "#FFFFFF",
+    fontFamily: "Poppins",
+    fontSize: "15px",
+    fontWeight: 500,
+    letterSpacing: 0,
+    lineHeight: "18px",
+  },
+  tempLabel: {
+    height: "71px",
+    width: "74px",
+    color: "#FFFFFF",
+    fontFamily: "Poppins",
+    fontSize: "50px",
+    fontWeight: "bold",
+    letterSpacing: 0,
+    lineHeight: "76px",
+    textAlign: "right",
+    margin: 0
   },
   labelDiv: {
     height: "36px",
@@ -96,13 +116,21 @@ const useStyle = makeStyles({
 });
 
 function App() {
-  const dispatch : AppDispatch = useDispatch();
 
-  useEffect(()=>{
-    dispatch(getLastValuesWheater())
-  },[dispatch])
+  const dispatch: AppDispatch = useDispatch();
 
-  const style = useStyle({});
+  const handleUpdateUser = async () => {
+    mockCity.forEach(async (el) => {
+      const resultAction = await dispatch(getLastValuesWheater(el.label))
+      getLastValuesWheater.fulfilled.match(resultAction)
+    })
+  }
+
+  useEffect(() => { handleUpdateUser() }, [])
+
+  const dataWeatherCity = useSelector(selectAllWeatherCity)
+
+  const style = useStyle();
 
   return (
 
@@ -147,38 +175,12 @@ function App() {
           }}
             id="addCity" label="Aggiungi città" />
 
-          <div style={{ height: "400px", margin: "20px", overflowY: "auto" }}>
 
-            {mockCity.map((el: any) => (
-
-              <Card style={{ borderRadius: "25px" }} className={el.active ? style.activeCity : style.disabledCity}>
-
-                <CardContent style={{ display: "flex", justifyContent: "space-around" }}>
-
-                  <div> <p className={style.cityLabel}>
-                    {el.label}
-                  </p></div>
-                  <div>
-                    <Typography variant="h5" component="div">
-                      icona meteo
-                    </Typography>
-                  </div>
+          {dataWeatherCity !== null && dataWeatherCity.map((el: any) => (
+            <CityWeather {...el}></CityWeather>
+          ))}
 
 
-
-                  <div >
-                    <Typography sx={{ mb: 1.5 }} color="text.secondary">
-                      gradi
-                    </Typography>
-                  </div>
-                </CardContent>
-
-              </Card>
-
-
-            ))}
-
-          </div>
         </div>
       </div>
 
