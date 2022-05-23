@@ -15,7 +15,8 @@ const initialState: TweatherSlice = {
 };
 
 
-export const getLastValuesWheater = createAsyncThunk("api/getLastValuesWeather", async () => {
+export const getLastValuesWheater = createAsyncThunk("api/getLastValuesWeather", async (city: string, thunkAPI) => {
+    //city=${userId}
     const data = await fetch(
         `https://api.openweathermap.org/data/2.5/weather?q=Massa&APPID=ad796c22fe5052c58fa2c89e91c13b64`
     )
