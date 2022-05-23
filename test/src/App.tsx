@@ -1,10 +1,47 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import logo from './logo.svg';
 import './App.css';
-import { Card, CardContent, Grid, TextField, Typography } from '@mui/material';
+import { Card, CardContent, Grid, InputAdornment, styled, TextField, Typography } from '@mui/material';
 import { makeStyles } from '@material-ui/core';
 import { mockCity } from './common/mockCity';
+import AddBoxOutlinedIcon from '@mui/icons-material/AddBoxOutlined';
 
+
+const CssTextField = styled(TextField)({
+
+  '& .MuiOutlinedInput-root': {
+    '& fieldset': {
+      border: "none",
+    },
+  },
+  '& .MuiInputLabel-root': {
+    height: "28px",
+    width: "144px",
+    color: "#01175F",
+    fontFamily: "Poppins",
+    fontSize: "20px",
+    fontWeight: 600,
+    letterSpacing: 0,
+    lineHeight: "30px",
+    textAlign: "center",
+  },
+  '& .MuiInputBase-input': {
+    height: "28px",
+    width: "144px",
+    color: "#01175F",
+    fontFamily: "Poppins",
+    fontSize: "20px",
+    fontWeight: 600,
+    letterSpacing: 0,
+    lineHeight: "30px",
+    textAlign: "center",
+  },
+  '& .MuiSvgIcon-root': {
+    height: "24px",
+    width: "24px",
+    color: "#01175F",
+  }
+});
 
 const useStyle = makeStyles({
   root: {
@@ -58,14 +95,19 @@ const useStyle = makeStyles({
 
 function App() {
 
+  const [data, setData] = useState<any>();
+
   async function weatherData() {
     const data = await fetch(
       `https://api.openweathermap.org/data/2.5/weather?q=Massa&APPID=ad796c22fe5052c58fa2c89e91c13b64`
     )
       .then((res) => res.json())
-      .then((data) =>
+      .then((data) => {
+        setData(data);
+        console.log("dati", data)
+      });
 
-        console.log("dati", data));
+
 
 
   }
@@ -84,15 +126,17 @@ function App() {
   //     setWeather({ data: data });
   //   }
 
-  
+
   useEffect(() => {
     weatherData();
   }, [])
 
-  const style = useStyle();
+  const style = useStyle({});
 
   return (
+
     <>
+
       <div style={{ display: "flex", flexWrap: "wrap", flexFlow: "row wrap", padding: "30px", justifyContent: "space-around" }}>
         <Card sx={{ width: 916, height: 440 }} style={{
           flex: "50%",
@@ -108,7 +152,7 @@ function App() {
 
             </Typography>
             <Typography sx={{ mb: 1.5 }} color="text.secondary">
-              adjective
+
             </Typography>
             <Typography variant="body2">
               well meaning and kindly.
@@ -123,7 +167,14 @@ function App() {
 
 
         <div style={{ margin: "20px", flex: "25%", flexFlow: "column wrap", display: "flex", alignContent: "center", alignItems: "center" }}>
-          <TextField style={{ width: "200px" }} id="outlined-basic" label="Outlined" variant="outlined" />
+          <CssTextField InputProps={{
+            endAdornment: (
+              <InputAdornment position="end">
+                <AddBoxOutlinedIcon />
+              </InputAdornment>
+            )
+          }}
+            id="addCity" label="Aggiungi città" />
 
           <div style={{ height: "400px", margin: "20px", overflowY: "auto" }}>
 
