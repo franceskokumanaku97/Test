@@ -25,13 +25,13 @@ export const getLastValuesWheater = createAsyncThunk("get/getLastValuesWeather",
     )
         .then((res) => res.json())
         .then((data) => {
-            console.log("dati slice",data)
+            console.log("dati slice", data)
             data.json()
-            
+
         });
-        console.log("dati slice",data)
-        return data;
-        //setValueWheater
+    console.log("dati slice", data)
+    return data;
+    //setValueWheater
 });
 
 export const weatherCitySlice = createSlice({
@@ -54,7 +54,7 @@ export const weatherCitySlice = createSlice({
     extraReducers: (builder) => {
         builder
             .addCase(getLastValuesWheater.fulfilled, (state, action) => {
-                console.log("action.payload",action.payload)
+                console.log("action.payload", action.payload)
                 // state.weather = [];
                 // state.sliceStatus = "pending";
                 // state.sliceError = null;
@@ -62,4 +62,4 @@ export const weatherCitySlice = createSlice({
     },
 });
 
-export const weatherCityReducer= weatherCitySlice.reducer;
+export const weatherCityReducer = weatherCitySlice.reducer;

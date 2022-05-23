@@ -98,46 +98,9 @@ const useStyle = makeStyles({
 function App() {
   const dispatch : AppDispatch = useDispatch();
 
-  // const resultAction = async () => {
-  //   dispatch(getLastValuesWheater())
-  // }
-
   useEffect(()=>{
     dispatch(getLastValuesWheater())
   },[dispatch])
-
-
-
-
-
-  const [data, setData] = useState<any>();
-
-  // async function weatherData() {
-  //   const data = await fetch(
-  //     `https://api.openweathermap.org/data/2.5/weather?q=Massa&APPID=ad796c22fe5052c58fa2c89e91c13b64`
-  //   )
-  //     .then((res) => res.json())
-  //     .then((data) => {
-  //       setData(data);
-  //       console.log("dati", data)
-  //     });
-  // }
-
-  // async function weatherData(e) {
-  //   e.preventDefault();
-  //   if (form.city == "") {
-  //     alert("Add values");
-  //   } else {
-  //     const data = await fetch(
-  //       `https://api.openweathermap.org/data/2.5/weather?q=${form.city},${form.country}&APPID=${APIKEY}`
-  //     )
-  //       .then((res) => res.json())
-  //       .then((data) => data);
-
-  //     setWeather({ data: data });
-  //   }
-
-
 
   const style = useStyle({});
 
