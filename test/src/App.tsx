@@ -1,10 +1,12 @@
-import React, { useEffect, useState } from 'react';
-import logo from './logo.svg';
-import './App.css';
-import { Card, CardContent, Grid, InputAdornment, styled, TextField, Typography } from '@mui/material';
 import { makeStyles } from '@material-ui/core';
-import { mockCity } from './common/mockCity';
 import AddBoxOutlinedIcon from '@mui/icons-material/AddBoxOutlined';
+import { Card, CardContent, InputAdornment, styled, TextField, Typography } from '@mui/material';
+import { useEffect, useState } from 'react';
+import { useDispatch } from 'react-redux';
+import './App.css';
+import { getLastValuesWheater } from './app/slice';
+import { AppDispatch } from './app/store';
+import { mockCity } from './common/mockCity';
 
 
 const CssTextField = styled(TextField)({
@@ -94,23 +96,32 @@ const useStyle = makeStyles({
 });
 
 function App() {
+  const dispatch : AppDispatch = useDispatch();
+
+  // const resultAction = async () => {
+  //   dispatch(getLastValuesWheater())
+  // }
+
+  useEffect(()=>{
+    dispatch(getLastValuesWheater())
+  },[dispatch])
+
+
+
+
 
   const [data, setData] = useState<any>();
 
-  async function weatherData() {
-    const data = await fetch(
-      `https://api.openweathermap.org/data/2.5/weather?q=Massa&APPID=ad796c22fe5052c58fa2c89e91c13b64`
-    )
-      .then((res) => res.json())
-      .then((data) => {
-        setData(data);
-        console.log("dati", data)
-      });
-
-
-
-
-  }
+  // async function weatherData() {
+  //   const data = await fetch(
+  //     `https://api.openweathermap.org/data/2.5/weather?q=Massa&APPID=ad796c22fe5052c58fa2c89e91c13b64`
+  //   )
+  //     .then((res) => res.json())
+  //     .then((data) => {
+  //       setData(data);
+  //       console.log("dati", data)
+  //     });
+  // }
 
   // async function weatherData(e) {
   //   e.preventDefault();
@@ -127,9 +138,6 @@ function App() {
   //   }
 
 
-  useEffect(() => {
-    weatherData();
-  }, [])
 
   const style = useStyle({});
 

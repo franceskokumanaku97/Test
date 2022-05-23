@@ -1,5 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 
+
 export type TweatherSlice = {
     city: [];
     weather: [];
@@ -15,21 +16,25 @@ const initialState: TweatherSlice = {
 };
 
 
-export const getLastValuesWheater = createAsyncThunk("api/getLastValuesWeather", async (city: string, thunkAPI) => {
+
+
+export const getLastValuesWheater = createAsyncThunk("get/getLastValuesWeather", async () => {
     //city=${userId}
     const data = await fetch(
         `https://api.openweathermap.org/data/2.5/weather?q=Massa&APPID=ad796c22fe5052c58fa2c89e91c13b64`
     )
         .then((res) => res.json())
         .then((data) => {
-
-            console.log("dati", data)
+            console.log("dati slice",data)
+            data.json()
+            
         });
-
+        console.log("dati slice",data)
+        return data;
         //setValueWheater
 });
 
-export const slice = createSlice({
+export const weatherCitySlice = createSlice({
     name: "weatherCity",
     initialState,
     reducers: {
@@ -48,16 +53,13 @@ export const slice = createSlice({
     },
     extraReducers: (builder) => {
         builder
-            .addCase(getLastValuesWheater.pending, (state, action) => {
-                state.weather = [];
-                state.sliceStatus = "pending";
-                state.sliceError = null;
-            })
-
-            .addCase(getLastValuesWheater.rejected, (state, action) => {
-                state.weather = [];
-                state.sliceStatus = "error";
-                state.sliceError = String(action);
+            .addCase(getLastValuesWheater.fulfilled, (state, action) => {
+                console.log("action.payload",action.payload)
+                // state.weather = [];
+                // state.sliceStatus = "pending";
+                // state.sliceError = null;
             })
     },
 });
+
+export const weatherCityReducer= weatherCitySlice.reducer;
