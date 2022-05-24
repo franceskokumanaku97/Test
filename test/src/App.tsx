@@ -131,6 +131,13 @@ const useStyle = makeStyles({
     lineHeight: "39px",
     margin: 0
   },
+  thisMonthLabel: {
+    color: "#FFFFFF",
+    fontFamily: "Poppins",
+    fontSize: "18px",
+    letterSpacing: 0,
+    lineHeight: "27px",
+  }
 
 });
 
@@ -143,7 +150,8 @@ const AntTabs = styled(Tabs)({
   },
   '& .MuiTabs-flexContainer': {
     backgroundColor: "#FFFFFF",
-    borderRadius: "35px 35px 0 0 "
+    borderRadius: "35px 35px 0 0 ",
+    width: "fit-content"
   },
   '& .MuiTab-textColorPrimary': {
     color: " #01175F",
@@ -163,7 +171,7 @@ const AntTabs = styled(Tabs)({
 });
 
 function TabPanel(props: TabPanelProps) {
-  const { children, value, index,dataWeatherCity, ...other } = props;
+  const { children, value, index, dataWeatherCity, activeCity, ...other } = props;
   const style = useStyle();
 
   return (
@@ -177,18 +185,20 @@ function TabPanel(props: TabPanelProps) {
         overflowY: "auto",
         height: "80%",
         flexFlow: "column wrap",
-        flex: "10%"
+        flex: "10%",
+        alignItems: "center",
+      background: "radial-gradient(circle, #5374E7 0%, #77B9F5 100%)"
       }}
       {...other}
     >
       {value === index && (
-         dataWeatherCity !== null && dataWeatherCity?.map((el: IWeather) =>
+        dataWeatherCity !== null && dataWeatherCity?.map((el: IWeather) =>
           el.listTemPerH.map((x: IlistTemPerH) => (
             <>
               <CardContent sx={{
-                margin: "20px", display: "flex", flexFlow: "column wrap", alignItems: "center",
-                height: "305px",
-                width: "148px",
+                margin: "20px",
+                display: "flex", flexFlow: "column wrap",
+                alignItems: "center",
                 borderRadius: "20px",
                 backgroundColor: "rgba(255,255,255,0.1)",
                 boxShadow: "5px 10px 20px 0 rgba(0,0,0,0.17)",
@@ -203,7 +213,37 @@ function TabPanel(props: TabPanelProps) {
           ))
 
         )
-      )}
+
+      )} <>
+        <CardContent sx={{
+          marginTop: "10px", display: "flex", flexFlow: "column wrap", alignItems: "center",
+          height: "305px",
+          width: "90%",
+          borderRadius: "20px",
+          backgroundColor: "rgba(255,255,255,0.1)",
+          boxShadow: "5px 10px 20px 0 rgba(0,0,0,0.17)",
+          justifyContent: "center"
+
+        }}>
+          {activeCity !== null ? <>
+            <div >
+              <p className={style.tempLabprops}>{activeCity.date}</p>
+              <img style={{ height: "133px", width: "130px" }} src={`http://openweathermap.org/img/w/${activeCity.icon}.png`}></img>
+            </div>
+            <div >
+              <p className={style.tempLabprops}>{activeCity.temp}</p>
+              <p className={style.thisMonthLabel}>Wind: {activeCity.wind}</p>
+              <p className={style.thisMonthLabel}>The high will be {activeCity.temp_max}, the low will be {activeCity.temp_min}.</p>
+              <p className={style.thisMonthLabel}>Humidity: {activeCity.humidity}</p>
+              <p className={style.thisMonthLabel}>Uv: {activeCity.uv}</p>
+              <p className={style.thisMonthLabel}>Dew Point: {activeCity.dewPoint}</p>
+            </div>
+
+          </> : null}
+
+        </CardContent>
+      </>
+
     </div>
   );
 }
@@ -219,7 +259,8 @@ interface TabPanelProps {
   children?: React.ReactNode;
   index: number;
   value: number;
-  dataWeatherCity:IWeather[];
+  dataWeatherCity: IWeather[];
+  activeCity: IWeather | null;
 }
 
 
@@ -238,11 +279,19 @@ function App() {
 
   const dataWeatherCity = useSelector(selectAllWeatherCity)
 
-  useEffect(() => { console.log(dataWeatherCity) }, [dataWeatherCity])
 
   const style = useStyle();
 
   const [value, setValue] = useState(0);
+
+  const [activeCity, setActiveCity] = useState<IWeather>();
+
+  useEffect(() => {
+    const valueFind = dataWeatherCity?.find((el: IWeather) => el.active === true);
+    if (valueFind) setActiveCity(valueFind)
+    console.log(dataWeatherCity)
+  }, [dataWeatherCity])
+
 
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
     console.log("newValue", newValue)
@@ -345,59 +394,10 @@ function App() {
                 <Tab label="This month" id={`simple-tab-1`} />
               </AntTabs>
             </Box>
-            <TabPanel value={value} index={0} dataWeatherCity={dataWeatherCity || []}>
+            <TabPanel value={value} index={0} dataWeatherCity={dataWeatherCity || []} activeCity={activeCity || null}>
 
             </TabPanel>
-            {/* <div
-              role="tabpanel"
-              hidden={value !== 0}
-              id={`simple-tabpanel-0`}
-              aria-labelledby={`simple-tab-0`}
-              style={{
-                display: "flex",
-                overflowY: "auto",
-                height: "80%",
-                flexFlow: "column wrap",
-                flex: "10%"
-              }}
-            >
-              {dataWeatherCity !== null && dataWeatherCity?.map((el: IWeather) =>
-                el.listTemPerH.map((x: IlistTemPerH) => (
-                  <>
-                    <CardContent sx={{
-                      margin: "20px", display: "flex", flexFlow: "column wrap", alignItems: "center",
-                      height: "305px",
-                      width: "148px",
-                      borderRadius: "20px",
-                      backgroundColor: "rgba(255,255,255,0.1)",
-                      boxShadow: "5px 10px 20px 0 rgba(0,0,0,0.17)",
-                    }}>
-                      <p className={style.tempLabprops}>{moment(x.date).format("dddd")}</p>
-                      <p className={style.tempLabprops}>{moment(x.date).format("h:mm")}</p>
-                      <p className={style.datpropsabprops}>{x.temp}</p>
-                      <img style={{ height: "103px", width: "90px" }} src={`http://openweathermap.org/img/w/${el.icon}.png`}></img>
-
-                    </CardContent>
-                  </>
-                ))
-
-              )}
-            </div> */}
-            {/* <div
-              role="tabpanel"
-              hidden={false}
-              id={`simple-tabpanel-1`}
-              aria-labelledby={`simple-tab-1`}
-              style={{
-                display: "flex",
-                overflowY: "auto",
-                height: "80%",
-                flexFlow: "column wrap",
-                flex: "10%"
-              }}
-            >
-              prova
-            </div> */}
+            
           </Box>
         </div>
 

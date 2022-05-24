@@ -1,7 +1,6 @@
 import { createAsyncThunk, createSelector, createSlice } from "@reduxjs/toolkit";
-import { AppDispatch, RootState } from "./store";
-import { useDispatch } from 'react-redux';
 import moment from "moment";
+import { RootState } from "./store";
 
 export type IlistTemPerH = {
     date: string;
@@ -17,6 +16,13 @@ export type IWeather = {
     active: boolean;
     temp: string;
     listTemPerH: IlistTemPerH[];
+    wind: string;
+    temp_max: string;
+    temp_min: string;
+    humidity: string;
+    uv: string;
+    dewPoint: string;
+
 };
 
 
@@ -77,7 +83,7 @@ export const weatherCitySlice = createSlice({
                     "name": action.payload.city.name,
                     "description": action.payload.list[0].weather[0].description,
                     "icon": action.payload.list[0].weather[0].icon,
-                    "active": action.payload.city.name === "Bologna" ? false : true,
+                    "active": action.payload.city.name === "Bologna" || action.payload.city.name === "Massa" ? false : true,
                     "temp": String(Math.round(action.payload.list[0].main.temp)) + "°",
                     "listTemPerH": action.payload.list.map((el: any, idx: number) => {
                         return {
@@ -85,7 +91,14 @@ export const weatherCitySlice = createSlice({
                             "icon": el.weather[0].icon,
                             "temp": String(Math.round(el.main.temp)) + "°",
                         }
+
                     }),
+                    "wind": action.payload.list[0].wind.speed,
+                    "temp_max": String(Math.round(action.payload.list[0].main.temp_max)) + "°",
+                    "temp_min": String(Math.round(action.payload.list[0].main.temp_min)) + "°",
+                    "humidity": action.payload.list[0].main.humidity,
+                    "uv": "3",
+                    "dewPoint": "3°C",
                 })
             })
     },
