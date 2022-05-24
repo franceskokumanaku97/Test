@@ -5,7 +5,7 @@ import moment from 'moment';
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import './App.css';
-import { getLastValuesWheater, IlistTemPerH, IWeather, selectAllWeatherCity } from './app/slice';
+import { getLastValuesWheater, IlistTemPerH, IWeather, selectAllWeatherCity, selectError } from './app/slice';
 import { AppDispatch } from './app/store';
 import CityWeather from './common/components/cityWeather';
 import { mockCity } from './common/mockCity';
@@ -155,13 +155,13 @@ const useStyle = makeStyles({
     fontWeight: "bold",
     letterSpacing: 0,
     lineHeight: "76px",
-    margin:0,
+    margin: 0,
   },
   labelTempToolTip: {
     color: "#01175F",
     fontFamily: "Poppins",
     fontSize: "20px",
-    fontWeight:500,
+    fontWeight: 500,
     letterSpacing: 0,
     lineHeight: "18px",
   },
@@ -169,7 +169,7 @@ const useStyle = makeStyles({
     color: "#01175F",
     fontFamily: "Poppins",
     fontSize: "20px",
-    fontWeight:300,
+    fontWeight: 300,
     letterSpacing: 0,
     lineHeight: "18px",
   }
@@ -312,8 +312,8 @@ function App() {
 
   useEffect(() => { handleUpdateUser() }, [])
 
-  const dataWeatherCity = useSelector(selectAllWeatherCity)
-
+  const dataWeatherCity = useSelector(selectAllWeatherCity);
+  const error = useSelector(selectError);
 
   const style = useStyle();
 
@@ -336,132 +336,134 @@ function App() {
   return (
 
     <>
+      {error === null ? (
+        <>
+          <div style={{ display: "flex", flexWrap: "wrap", flexFlow: "row wrap", justifyContent: "space-around" }}>
+            <Card sx={{ width: 916, height: 440 }} style={{
+              flex: "50%",
+              display: "flex", margin: "20px", boxShadow: "5px 10px 20px 0 rgba(0,0,0,0.5)",
+              borderRadius: "25px",
+              background: "radial-gradient(circle, #5374E7 0%, #77B9F5 100%",
+            }}>
+              <CardContent style={{ width: "100%" }}>
+                <div className={style.toolTip}>
+                  <p className={style.tempLabprops}>{activeCity?.temp}</p>
+                  <img style={{ height: "103px", width: "90px" }} src={`http://openweathermap.org/img/w/${activeCity?.icon}.png`}></img>
+                </div>
+                <div style={{ width: "80%", float: "right", display: "flex", flexFlow: "column wrap", marginTop: "70px" }}>
+                  <p className={style.labelToolTip}>{activeCity?.name}</p>
+                  <p className={style.labelTempToolTip}>{activeCity?.date}</p>
+                  <p className={style.labelDescriptionToolTip}>{activeCity?.description}</p>
+                </div>
+              </CardContent>
 
-      <div style={{ display: "flex", flexWrap: "wrap", flexFlow: "row wrap", justifyContent: "space-around" }}>
-        <Card sx={{ width: 916, height: 440 }} style={{
-          flex: "50%",
-          display: "flex", margin: "20px", boxShadow: "5px 10px 20px 0 rgba(0,0,0,0.5)",
-          borderRadius: "25px",
-          background: "radial-gradient(circle, #5374E7 0%, #77B9F5 100%",
-        }}>
-          <CardContent style={{width:"100%"}}>
-            <div className={style.toolTip}>
-              <p className={style.tempLabprops}>{activeCity?.temp}</p>
-              <img style={{ height: "103px", width: "90px" }} src={`http://openweathermap.org/img/w/${activeCity?.icon}.png`}></img>
+            </Card>
+
+
+
+
+            <div style={{ margin: "20px", flex: "25%", flexFlow: "column wrap", display: "flex", alignContent: "center", alignItems: "center" }}>
+              <CssTextField InputProps={{
+                endAdornment: (
+                  <InputAdornment position="end">
+                    <AddBoxOutlinedIcon />
+                  </InputAdornment>
+                )
+              }}
+                id="addCity" label="Aggiungi città" />
+
+
+              {dataWeatherCity !== null && dataWeatherCity.map((el: any) => (
+                <CityWeather {...el}></CityWeather>
+              ))}
+
+
             </div>
-            <div style={{width:"80%",float:"right",display:"flex",flexFlow:"column wrap",marginTop:"70px"}}>
-            <p className={style.labelToolTip}>{activeCity?.name}</p>
-            <p className={style.labelTempToolTip}>{activeCity?.date}</p>
-            <p className={style.labelDescriptionToolTip}>{activeCity?.description}</p>
+          </div>
+
+
+          <div style={{ display: "flex", flexFlow: "row wrap", justifyContent: "space-around", alignItems: "baseline" }}>
+            <div >
+              <p className={style.labelDiv}>Today</p>
+
+              <Card sx={{ width: 302, height: 385 }} style={{
+                boxShadow: "5px 10px 20px 0 rgba(0,0,0,0.5)",
+                borderRadius: "25px",
+                background: "radial-gradient(circle, #5374E7 0%, #77B9F5 100%",
+              }}>
+                <CardContent>
+                  <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
+                    Word of the Day
+                  </Typography>
+                  <Typography variant="h5" component="div">
+
+                  </Typography>
+                  <Typography sx={{ mb: 1.5 }} color="text.secondary">
+                    adjective
+                  </Typography>
+                  <Typography variant="body2">
+                    well meaning and kindly.
+                    <br />
+                    {'"a benevolent smile"'}
+                  </Typography>
+                </CardContent>
+
+              </Card>
             </div>
-          </CardContent>
-
-        </Card>
 
 
+            <div style={{
+              boxShadow: "5px 10px 20px 0 rgba(0,0,0,0.5)",
+              borderRadius: "35px",
+              background: "radial-gradient(circle, #5374E7 0%, #77B9F5 100%)"
+
+            }}>
+              <Box sx={{ width: 664, height: 464 }} style={{ backgroundColor: "none", alignItems: "center" }}>
+                <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
+                  <AntTabs value={value} onChange={handleChange} >
+                    <Tab label="This week" id={`simple-tab-0`} value={0} />
+                    <Tab label="This month" id={`simple-tab-1`} value={1} />
+                  </AntTabs>
+                </Box>
+                <TabPanel value={value} index={0} dataWeatherCity={dataWeatherCity || []} activeCity={activeCity || null}>
+
+                </TabPanel>
 
 
-        <div style={{ margin: "20px", flex: "25%", flexFlow: "column wrap", display: "flex", alignContent: "center", alignItems: "center" }}>
-          <CssTextField InputProps={{
-            endAdornment: (
-              <InputAdornment position="end">
-                <AddBoxOutlinedIcon />
-              </InputAdornment>
-            )
-          }}
-            id="addCity" label="Aggiungi città" />
-
-
-          {dataWeatherCity !== null && dataWeatherCity.map((el: any) => (
-            <CityWeather {...el}></CityWeather>
-          ))}
-
-
-        </div>
-      </div>
-
-
-      <div style={{ display: "flex", flexFlow: "row wrap", justifyContent: "space-around", alignItems: "baseline" }}>
-        <div >
-          <p className={style.labelDiv}>Today</p>
-
-          <Card sx={{ width: 302, height: 385 }} style={{
-            boxShadow: "5px 10px 20px 0 rgba(0,0,0,0.5)",
-            borderRadius: "25px",
-            background: "radial-gradient(circle, #5374E7 0%, #77B9F5 100%",
-          }}>
-            <CardContent>
-              <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
-                Word of the Day
-              </Typography>
-              <Typography variant="h5" component="div">
-
-              </Typography>
-              <Typography sx={{ mb: 1.5 }} color="text.secondary">
-                adjective
-              </Typography>
-              <Typography variant="body2">
-                well meaning and kindly.
-                <br />
-                {'"a benevolent smile"'}
-              </Typography>
-            </CardContent>
-
-          </Card>
-        </div>
-
-
-        <div style={{
-          boxShadow: "5px 10px 20px 0 rgba(0,0,0,0.5)",
-          borderRadius: "35px",
-          background: "radial-gradient(circle, #5374E7 0%, #77B9F5 100%)"
-
-        }}>
-          <Box sx={{ width: 664, height: 464 }} style={{ backgroundColor: "none", alignItems: "center" }}>
-            <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
-              <AntTabs value={value} onChange={handleChange} >
-                <Tab label="This week" id={`simple-tab-0`} value={0}/>
-                <Tab label="This month" id={`simple-tab-1`} value={1} />
-              </AntTabs>
-            </Box>
-            <TabPanel value={value} index={0} dataWeatherCity={dataWeatherCity || []} activeCity={activeCity || null}>
-
-            </TabPanel>
-           
-
-          </Box>
-        </div>
+              </Box>
+            </div>
 
 
 
 
-        <div  >
-          <p className={style.labelDiv}>Search</p>
-          <Card sx={{ width: 374, height: 140 }} style={{
-            boxShadow: "5px 10px 20px 0 rgba(0,0,0,0.5)",
-            borderRadius: "25px",
-            background: "#FFF"
-          }}>
-            <CardContent>
+            <div  >
+              <p className={style.labelDiv}>Search</p>
+              <Card sx={{ width: 374, height: 140 }} style={{
+                boxShadow: "5px 10px 20px 0 rgba(0,0,0,0.5)",
+                borderRadius: "25px",
+                background: "#FFF"
+              }}>
+                <CardContent>
 
-            </CardContent>
+                </CardContent>
 
-          </Card>
+              </Card>
 
-          <p className={style.labelDiv}>Localization</p>
-          <Card sx={{ width: 374, height: 140 }} style={{
-            boxShadow: "5px 10px 20px 0 rgba(0,0,0,0.5)",
-            borderRadius: "25px",
-            background: "radial-gradient(circle, #5374E7 0%, #77B9F5 100%"
-          }}>
-            <CardContent>
+              <p className={style.labelDiv}>Localization</p>
+              <Card sx={{ width: 374, height: 140 }} style={{
+                boxShadow: "5px 10px 20px 0 rgba(0,0,0,0.5)",
+                borderRadius: "25px",
+                background: "radial-gradient(circle, #5374E7 0%, #77B9F5 100%"
+              }}>
+                <CardContent>
 
-            </CardContent>
+                </CardContent>
 
-          </Card>
-        </div>
-      </div >
+              </Card>
+            </div>
+          </div ></>) : <><p className={style.labelDiv}>ERROR ON RETREIVING DATA</p></>}
     </>
+
   );
 }
 

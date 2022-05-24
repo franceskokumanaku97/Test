@@ -101,10 +101,16 @@ export const weatherCitySlice = createSlice({
                     "dewPoint": "3°C",
                 })
             })
+            .addCase(getLastValuesWheater.rejected, (state, action) => {
+                state.sliceError = action.error.message || null
+            })
     },
 });
 
 export const selectAllWeatherCity = createSelector((state: RootState) => state.weatherCity,
-    (cH) => cH.weather)
+    (cH) => cH.weather);
+
+export const selectError = createSelector((state: RootState) => state.weatherCity,
+    (cH) => cH.sliceError)
 
 export const weatherCityReducer = weatherCitySlice.reducer;
