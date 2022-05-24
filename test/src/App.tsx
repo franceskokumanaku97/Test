@@ -149,13 +149,29 @@ const useStyle = makeStyles({
     justifyContent: "center",
   },
   labelToolTip: {
-    color: "#FFFFFF",
+    color: "#01175F",
     fontFamily: "Poppins",
     fontSize: "50px",
     fontWeight: "bold",
     letterSpacing: 0,
     lineHeight: "76px",
-    textAlign: "right",
+    margin:0,
+  },
+  labelTempToolTip: {
+    color: "#01175F",
+    fontFamily: "Poppins",
+    fontSize: "20px",
+    fontWeight:500,
+    letterSpacing: 0,
+    lineHeight: "18px",
+  },
+  labelDescriptionToolTip: {
+    color: "#01175F",
+    fontFamily: "Poppins",
+    fontSize: "20px",
+    fontWeight:300,
+    letterSpacing: 0,
+    lineHeight: "18px",
   }
 
 });
@@ -328,10 +344,15 @@ function App() {
           borderRadius: "25px",
           background: "radial-gradient(circle, #5374E7 0%, #77B9F5 100%",
         }}>
-          <CardContent>
+          <CardContent style={{width:"100%"}}>
             <div className={style.toolTip}>
               <p className={style.tempLabprops}>{activeCity?.temp}</p>
               <img style={{ height: "103px", width: "90px" }} src={`http://openweathermap.org/img/w/${activeCity?.icon}.png`}></img>
+            </div>
+            <div style={{width:"80%",float:"right",display:"flex",flexFlow:"column wrap",marginTop:"70px"}}>
+            <p className={style.labelToolTip}>{activeCity?.name}</p>
+            <p className={style.labelTempToolTip}>{activeCity?.date}</p>
+            <p className={style.labelDescriptionToolTip}>{activeCity?.description}</p>
             </div>
           </CardContent>
 
