@@ -302,7 +302,7 @@ function App() {
 
     <>
 
-      <div style={{ display: "flex", flexWrap: "wrap", flexFlow: "row wrap", padding: "30px", justifyContent: "space-around" }}>
+      <div style={{ display: "flex", flexWrap: "wrap", flexFlow: "row wrap", justifyContent: "space-around" }}>
         <Card sx={{ width: 916, height: 440 }} style={{
           flex: "50%",
           display: "flex", margin: "20px", boxShadow: "5px 10px 20px 0 rgba(0,0,0,0.5)",
@@ -351,7 +351,7 @@ function App() {
       </div>
 
 
-      <div style={{ display: "flex", flexFlow: "row wrap", padding: "30px", justifyContent: "space-around", alignItems: "baseline" }}>
+      <div style={{ display: "flex", flexFlow: "row wrap",  justifyContent: "space-around", alignItems: "baseline" }}>
         <div >
           <p className={style.labelDiv}>Today</p>
 
