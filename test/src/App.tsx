@@ -137,6 +137,25 @@ const useStyle = makeStyles({
     fontSize: "18px",
     letterSpacing: 0,
     lineHeight: "27px",
+  },
+  toolTip: {
+    borderRadius: "0 25px 25px 0",
+    background: "radial-gradient(circle, #5374E7 0%, #77B9F5 100%)",
+    boxShadow: "5px 10px 20px 0 rgba(0,0,0,0.17)",
+    height: "280px", width: "140px", position: "absolute", left: "10px", top: "90px",
+    display: "flex",
+    flexFlow: "column wrap",
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  labelToolTip: {
+    color: "#FFFFFF",
+    fontFamily: "Poppins",
+    fontSize: "50px",
+    fontWeight: "bold",
+    letterSpacing: 0,
+    lineHeight: "76px",
+    textAlign: "right",
   }
 
 });
@@ -187,11 +206,11 @@ function TabPanel(props: TabPanelProps) {
         flexFlow: "column wrap",
         flex: "10%",
         alignItems: "center",
-      background: "radial-gradient(circle, #5374E7 0%, #77B9F5 100%)"
+        background: "radial-gradient(circle, #5374E7 0%, #77B9F5 100%)"
       }}
       {...other}
     >
-      {value === index && (
+      {value === 0 ? (
         dataWeatherCity !== null && dataWeatherCity?.map((el: IWeather) =>
           el.listTemPerH.map((x: IlistTemPerH) => (
             <>
@@ -214,7 +233,7 @@ function TabPanel(props: TabPanelProps) {
 
         )
 
-      )} <>
+      ) : <>
         <CardContent sx={{
           marginTop: "10px", display: "flex", flexFlow: "column wrap", alignItems: "center",
           height: "305px",
@@ -241,8 +260,8 @@ function TabPanel(props: TabPanelProps) {
 
           </> : null}
 
-        </CardContent>
-      </>
+        </CardContent></>}
+
 
     </div>
   );
@@ -310,20 +329,10 @@ function App() {
           background: "radial-gradient(circle, #5374E7 0%, #77B9F5 100%",
         }}>
           <CardContent>
-            <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
-              Word of the Day
-            </Typography>
-            <Typography variant="h5" component="div">
-
-            </Typography>
-            <Typography sx={{ mb: 1.5 }} color="text.secondary">
-
-            </Typography>
-            <Typography variant="body2">
-              well meaning and kindly.
-              <br />
-              {'"a benevolent smile"'}
-            </Typography>
+            <div className={style.toolTip}>
+              <p className={style.tempLabprops}>{activeCity?.temp}</p>
+              <img style={{ height: "103px", width: "90px" }} src={`http://openweathermap.org/img/w/${activeCity?.icon}.png`}></img>
+            </div>
           </CardContent>
 
         </Card>
@@ -351,7 +360,7 @@ function App() {
       </div>
 
 
-      <div style={{ display: "flex", flexFlow: "row wrap",  justifyContent: "space-around", alignItems: "baseline" }}>
+      <div style={{ display: "flex", flexFlow: "row wrap", justifyContent: "space-around", alignItems: "baseline" }}>
         <div >
           <p className={style.labelDiv}>Today</p>
 
@@ -387,17 +396,18 @@ function App() {
           background: "radial-gradient(circle, #5374E7 0%, #77B9F5 100%)"
 
         }}>
-          <Box sx={{ width: 564, height: 464 }} style={{ backgroundColor: "none", alignItems: "center" }}>
+          <Box sx={{ width: 664, height: 464 }} style={{ backgroundColor: "none", alignItems: "center" }}>
             <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
               <AntTabs value={value} onChange={handleChange} >
-                <Tab label="This week" id={`simple-tab-0`} />
-                <Tab label="This month" id={`simple-tab-1`} />
+                <Tab label="This week" id={`simple-tab-0`} value={0}/>
+                <Tab label="This month" id={`simple-tab-1`} value={1} />
               </AntTabs>
             </Box>
             <TabPanel value={value} index={0} dataWeatherCity={dataWeatherCity || []} activeCity={activeCity || null}>
 
             </TabPanel>
-            
+           
+
           </Box>
         </div>
 
