@@ -1,15 +1,15 @@
 import { makeStyles } from '@material-ui/core';
 import AddBoxOutlinedIcon from '@mui/icons-material/AddBoxOutlined';
-import { Box, Card, CardContent, InputAdornment, styled, Tab, Tabs, TextField, Typography } from '@mui/material';
+import { Box, Button, Card, CardContent, IconButton, InputAdornment, styled, Tab, Tabs, TextField, Typography } from '@mui/material';
 import moment from 'moment';
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import './App.css';
-import { getLastValuesWheater, IlistTemPerH, IWeather, selectAllWeatherCity, selectError } from './app/slice';
+import { getLastValuesWheater, ICity, IlistTemPerH, IWeather, selectAllWeatherCity, selectCity, selectError, weatherCitySlice } from './app/slice';
 import { AppDispatch } from './app/store';
 import CityWeather from './common/components/cityWeather';
-import { mockCity } from './common/mockCity';
-
+import AddLocationIcon from '@mui/icons-material/AddLocation';
+import Localization from './common/components/localization';
 
 const CssTextField = styled(TextField)({
 
@@ -300,18 +300,7 @@ interface TabPanelProps {
 
 
 function App() {
-
-  const dispatch: AppDispatch = useDispatch();
-
-  const handleUpdateUser = async () => {
-    mockCity.forEach(async (el) => {
-      const resultAction = await dispatch(getLastValuesWheater(el.label))
-      getLastValuesWheater.fulfilled.match(resultAction)
-    })
-  }
-
-  useEffect(() => { handleUpdateUser() }, [])
-
+  const city = useSelector(selectCity);
   const dataWeatherCity = useSelector(selectAllWeatherCity);
   const error = useSelector(selectError);
 
@@ -321,6 +310,26 @@ function App() {
 
   const [activeCity, setActiveCity] = useState<IWeather>();
 
+
+  const dispatch: AppDispatch = useDispatch();
+
+  const handleUpdateUser = async () => {
+    dispatch(weatherCitySlice.actions.setLastValues([]));
+    city.forEach(async (el: ICity) => {
+
+      try {
+        const resultAction = await dispatch(getLastValuesWheater({ "lat": el.lat, "long": el.lon }))
+        getLastValuesWheater.fulfilled.match(resultAction)
+      } catch (err) {
+
+      }
+
+    })
+  }
+
+  useEffect(() => { handleUpdateUser() }, [city])
+
+
   useEffect(() => {
     const valueFind = dataWeatherCity?.find((el: IWeather) => el.active === true);
     if (valueFind) setActiveCity(valueFind)
@@ -329,9 +338,10 @@ function App() {
 
 
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
-    console.log("newValue", newValue)
     setValue(newValue);
   };
+
+
 
   return (
 
@@ -450,16 +460,7 @@ function App() {
               </Card>
 
               <p className={style.labelDiv}>Localization</p>
-              <Card sx={{ width: 374, height: 140 }} style={{
-                boxShadow: "5px 10px 20px 0 rgba(0,0,0,0.5)",
-                borderRadius: "25px",
-                background: "radial-gradient(circle, #5374E7 0%, #77B9F5 100%"
-              }}>
-                <CardContent>
-
-                </CardContent>
-
-              </Card>
+              <Localization />
             </div>
           </div ></>) : <><p className={style.labelDiv}>ERROR ON RETREIVING DATA</p></>}
     </>

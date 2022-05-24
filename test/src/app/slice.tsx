@@ -8,6 +8,14 @@ export type IlistTemPerH = {
     temp: string;
 };
 
+export type ICity = {
+    code?: number;
+    label: string;
+    active: boolean;
+    lat ?:string;
+    lon?:string;
+}
+
 export type IWeather = {
     date: string;
     name: string;
@@ -27,14 +35,16 @@ export type IWeather = {
 
 
 export type TweatherSlice = {
-    city: [];
+    city: ICity[];
     weather: IWeather[] | null;
     sliceStatus: "ready" | "pending" | "error";
     sliceError: string | null;
 };
 
 const initialState: TweatherSlice = {
-    city: [],
+    city: [
+    { code: 1, label: "Milano",lat:"40.68",lon:"34.20", active: true },
+    { code: 3, label: "Bologna",lat:"44.49",lon:"11.34", active: false }],
     weather: [],
     sliceStatus: "pending",
     sliceError: null,
@@ -43,12 +53,12 @@ const initialState: TweatherSlice = {
 
 
 
-export const getLastValuesWheater = createAsyncThunk("get/getLastValuesWeather", async (city: string) => {
+export const getLastValuesWheater = createAsyncThunk("get/getLastValuesWeather", async (cord:any) => {
     //city=${userId}
     console.log("qua")
     try {
         const data = await fetch(
-            `https://api.openweathermap.org/data/2.5/forecast?q=${city}&APPID=ad796c22fe5052c58fa2c89e91c13b64&units=metric`
+            `https://api.openweathermap.org/data/2.5/forecast?lat=${cord.lat}&lon=${cord.long}&APPID=ad796c22fe5052c58fa2c89e91c13b64&units=metric`
         )
         return data.json();
     } catch (err) {
@@ -61,9 +71,13 @@ export const weatherCitySlice = createSlice({
     name: "weatherCity",
     initialState,
     reducers: {
+        addCity:(state,action)=>{
+         
+            state.city.push(action.payload)
+        },
         setLastValues: (state, action) => {
             try {
-                state.weather = action.payload.results;
+                state.weather = action.payload;
                 state.sliceStatus = "ready";
                 state.sliceError = null;
             } catch (e) {
@@ -77,13 +91,13 @@ export const weatherCitySlice = createSlice({
     extraReducers: (builder) => {
         builder
             .addCase(getLastValuesWheater.fulfilled, (state, action) => {
-                console.log("data.json", action.payload)
+                console.log("data.json", action.payload);
                 state.weather?.push({
                     "date": moment(new Date()).format("ddd DD, MMM"),
                     "name": action.payload.city.name,
                     "description": action.payload.list[0].weather[0].description,
                     "icon": action.payload.list[0].weather[0].icon,
-                    "active": action.payload.city.name === "Bologna" || action.payload.city.name === "Massa" ? false : true,
+                    "active": action.payload.city.name === "Bologna" ? true : false,
                     "temp": String(Math.round(action.payload.list[0].main.temp)) + "°",
                     "listTemPerH": action.payload.list.map((el: any, idx: number) => {
                         return {
@@ -109,6 +123,9 @@ export const weatherCitySlice = createSlice({
 
 export const selectAllWeatherCity = createSelector((state: RootState) => state.weatherCity,
     (cH) => cH.weather);
+
+    export const selectCity = createSelector((state: RootState) => state.weatherCity,
+    (cH) => cH.city);
 
 export const selectError = createSelector((state: RootState) => state.weatherCity,
     (cH) => cH.sliceError)
