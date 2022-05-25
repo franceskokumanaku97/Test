@@ -55,7 +55,7 @@ const initialState: TweatherSlice = {
 
 export const getLastValuesWheater = createAsyncThunk("get/getLastValuesWeather", async (cord:any) => {
     //city=${userId}
-    console.log("qua")
+  
     try {
         const data = await fetch(
             `https://api.openweathermap.org/data/2.5/forecast?lat=${cord.lat}&lon=${cord.long}&APPID=ad796c22fe5052c58fa2c89e91c13b64&units=metric`
@@ -91,7 +91,7 @@ export const weatherCitySlice = createSlice({
     extraReducers: (builder) => {
         builder
             .addCase(getLastValuesWheater.fulfilled, (state, action) => {
-                console.log("data.json", action.payload);
+            
                 state.weather?.push({
                     "date": moment(new Date()).format("ddd DD, MMM"),
                     "name": action.payload.city.name,

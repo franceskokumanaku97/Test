@@ -39,7 +39,7 @@ function Localization() {
             setStatus('Locating...');
             navigator.geolocation.getCurrentPosition((position) => {
                 setStatus("")
-                console.log("dati",position.coords.latitude,position.coords.latitude)
+              
                 setLat(position.coords.latitude);
                 setLng(position.coords.longitude);
                 dispatch(weatherCitySlice.actions.addCity(

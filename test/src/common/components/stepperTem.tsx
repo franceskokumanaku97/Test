@@ -106,8 +106,7 @@ export default function StepperTemp() {
 
     const normalizeData = (data: IWeather | null): IlistTemPerH[] | null => {
         if (data !== null) {
-            console.log("normalizeData", data.listTemPerH.filter((el: IlistTemPerH) =>
-                moment(new Date(el.date)).format("YYYY-MM-DD") === moment(new Date()).format("YYYY-MM-DD")))
+
 
 
             return data.listTemPerH.filter((el: IlistTemPerH) => (

@@ -374,7 +374,7 @@ function App() {
   useEffect(() => {
     const valueFind = dataWeatherCity?.find((el: IWeather) => el.active === true);
     if (valueFind) setActiveCity(valueFind)
-    console.log(dataWeatherCity)
+
   }, [dataWeatherCity])
 
 
