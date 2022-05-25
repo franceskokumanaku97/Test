@@ -1,19 +1,11 @@
-import * as React from 'react';
+import { makeStyles } from '@material-ui/core';
+import { styled } from '@mui/material';
 import Box from '@mui/material/Box';
 import Stepper from '@mui/material/Stepper';
-import Step from '@mui/material/Step';
-import StepLabel from '@mui/material/StepLabel';
-import StepContent from '@mui/material/StepContent';
-import Button from '@mui/material/Button';
-import Paper from '@mui/material/Paper';
-import Typography from '@mui/material/Typography';
-import { IlistTemPerH, IWeather, selectDayWeather } from '../../app/slice';
-import { useDispatch, useSelector } from 'react-redux';
-import { useEffect, useState } from 'react';
 import moment from 'moment';
-import { makeStyles } from '@material-ui/core';
-import { StepConnector, stepConnectorClasses, styled } from '@mui/material';
-import FiberManualRecordIcon from '@mui/icons-material/FiberManualRecord';
+import { useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
+import { IlistTemPerH, IWeather, selectDayWeather } from '../../app/slice';
 
 
 const EditStepper = styled(Stepper)(({ theme }) => ({
@@ -37,7 +29,7 @@ const EditStepper = styled(Stepper)(({ theme }) => ({
 
 const useStyle = makeStyles({
     label: {
-       
+
         color: "#FFFFFF",
         fontFamily: "Poppins",
         fontSize: "18px",
@@ -47,7 +39,8 @@ const useStyle = makeStyles({
         margin: 0,
     },
     labelTime: {
-      
+        height: "28px",
+        width: "58px",
         color: "#FFFFFF",
         fontFamily: "Poppins",
         fontSize: "20px",
@@ -55,9 +48,10 @@ const useStyle = makeStyles({
         letterSpacing: "0",
         lineHeight: "30px",
         margin: 0,
+        textAlign: "center"
     },
     labelTemp: {
-       
+
         color: "#FFFFFF",
         fontFamily: "Poppins",
         fontSize: "40px",
@@ -65,7 +59,7 @@ const useStyle = makeStyles({
         letterSpacing: "0",
         lineHeight: "60px",
         margin: 0,
-        marginRight:"10px"
+        marginRight: "10px"
     },
     step: {
 
@@ -74,7 +68,7 @@ const useStyle = makeStyles({
         flexDirection: "row",
         justifyContent: "flex-start",
         backgroundColor: "cream",
-      
+
     },
     vStepper: {
         position: "relative"
@@ -91,14 +85,14 @@ const useStyle = makeStyles({
         left: "12px",
         /*   height: 120px; */
         height: "100%",
-       
+
         borderLeft: "5px solid #FFF",
 
         position: "absolute",
-        
+
     },
-    content:{
-        marginLeft:" 20px",
+    content: {
+        marginLeft: " 20px",
         display: "inline-block"
     }
 
@@ -133,12 +127,12 @@ export default function StepperTemp() {
     return (
         <>
             {dataToDisplay && dataToDisplay !== null ?
-                <Box sx={{ marginTop: "40px",display:"flex",flexFlow:"column",alignItems:"center" }}>
+                <Box sx={{ marginTop: "40px", display: "flex", flexFlow: "column", alignItems: "center" }}>
                     <p className={style.label}>Now</p>
                     {dataToDisplay.map((step, index) => (
                         <>
                             <div className={style.step}>
-                            <div className={style.content}>
+                                <div className={style.content}>
                                     <p className={style.labelTemp}>{step.temp}</p>
                                 </div>
                                 <div className={style.vStepper}>
@@ -146,35 +140,15 @@ export default function StepperTemp() {
                                     <div className={style.line}></div>
                                 </div>
                                 <div className={style.content}>
-                                    <p className={style.labelTime}>{moment(step.date).format("LT")}</p>
+                                    <p className={style.labelTime}>{moment(step.date).format("h a")}</p>
                                 </div>
-                                
+
                             </div>
 
                         </>
 
 
                     ))}
-                    {/* <EditStepper orientation="vertical" >
-                       
-
-                            <Step active={false} key={step.temp}>
-                                <StepLabel
-
-                                >
-                                    <p className={style.label}>{step.temp}</p>
-                                </StepLabel>
-                                <StepLabel
-
-                                >
-                                    <p className={style.label}>{step.temp}</p>
-                                </StepLabel>
-
-                            </Step>
-                        ))}
-                    </EditStepper> */}
-
-
 
                 </Box> : null}
 

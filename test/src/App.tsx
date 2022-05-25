@@ -411,8 +411,8 @@ function App() {
             <div style={{
               boxShadow: "5px 10px 20px 0 rgba(0,0,0,0.5)",
               borderRadius: "35px",
-              background: "radial-gradient(circle, #5374E7 0%, #77B9F5 100%)"
-
+              background: "radial-gradient(circle, #5374E7 0%, #77B9F5 100%)",
+              marginTop:"25px"
             }}>
               <Box sx={{ width: 664, height: 464 }} style={{ backgroundColor: "none", alignItems: "center" }}>
                 <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
