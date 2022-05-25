@@ -124,7 +124,10 @@ export const weatherCitySlice = createSlice({
 export const selectAllWeatherCity = createSelector((state: RootState) => state.weatherCity,
     (cH) => cH.weather);
 
-    export const selectCity = createSelector((state: RootState) => state.weatherCity,
+    export const selectDayWeather = createSelector((state: RootState) => state.weatherCity,
+    (cH) => cH.weather?.find((el)=> el.active===true) || null);
+
+export const selectCity = createSelector((state: RootState) => state.weatherCity,
     (cH) => cH.city);
 
 export const selectError = createSelector((state: RootState) => state.weatherCity,

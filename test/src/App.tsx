@@ -10,6 +10,7 @@ import { AppDispatch } from './app/store';
 import CityWeather from './common/components/cityWeather';
 import AddLocationIcon from '@mui/icons-material/AddLocation';
 import Localization from './common/components/localization';
+import StepperTemp from './common/components/stepperTem';
 
 const CssTextField = styled(TextField)({
 
@@ -401,22 +402,7 @@ function App() {
                 borderRadius: "25px",
                 background: "radial-gradient(circle, #5374E7 0%, #77B9F5 100%",
               }}>
-                <CardContent>
-                  <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
-                    Word of the Day
-                  </Typography>
-                  <Typography variant="h5" component="div">
-
-                  </Typography>
-                  <Typography sx={{ mb: 1.5 }} color="text.secondary">
-                    adjective
-                  </Typography>
-                  <Typography variant="body2">
-                    well meaning and kindly.
-                    <br />
-                    {'"a benevolent smile"'}
-                  </Typography>
-                </CardContent>
+               <StepperTemp></StepperTemp>
 
               </Card>
             </div>
@@ -454,7 +440,6 @@ function App() {
                 background: "#FFF"
               }}>
                 <CardContent>
-
                 </CardContent>
 
               </Card>
