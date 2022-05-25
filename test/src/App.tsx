@@ -412,7 +412,7 @@ function App() {
             </div>
 
 
-            <Box style={{ backgroundColor: "none", alignItems: "center", }}>
+            <Box style={{ backgroundColor: "none", alignItems: "center",marginTop:"25px" }}>
 
               <AntTabs value={value} onChange={handleChange} >
                 <Tab label="This week" id={`simple-tab-0`} value={0} />
