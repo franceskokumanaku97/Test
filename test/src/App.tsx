@@ -1,6 +1,6 @@
 import { makeStyles } from '@material-ui/core';
 import AddBoxOutlinedIcon from '@mui/icons-material/AddBoxOutlined';
-import { Box, Button, Card, CardContent, IconButton, InputAdornment, styled, Tab, Tabs, TextField, Typography } from '@mui/material';
+import { Box, Card, CardContent, InputAdornment, styled, Tab, Tabs, TextField } from '@mui/material';
 import moment from 'moment';
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
@@ -8,7 +8,6 @@ import './App.css';
 import { getLastValuesWheater, ICity, IlistTemPerH, IWeather, selectAllWeatherCity, selectCity, selectError, weatherCitySlice } from './app/slice';
 import { AppDispatch } from './app/store';
 import CityWeather from './common/components/cityWeather';
-import AddLocationIcon from '@mui/icons-material/AddLocation';
 import Localization from './common/components/localization';
 import StepperTemp from './common/components/stepperTem';
 
@@ -202,7 +201,8 @@ const AntTabs = styled(Tabs)({
   '& .Mui-selected': {
     color: " #FFF !important",
     background: "radial-gradient(circle, #5374E7 0%, #77B9F5 100%)",
-    borderRadius: "35px 35px 0 0"
+    borderRadius: "35px 35px 0 0",
+    boxShadow: "5px 10px 20px 0 rgba(0,0,0,0.5)"
   }
 });
 
@@ -219,11 +219,14 @@ function TabPanel(props: TabPanelProps) {
       style={{
         display: "flex",
         overflowY: "auto",
-        height: "80%",
         flexFlow: "column wrap",
         flex: "10%",
         alignItems: "center",
-        background: "radial-gradient(circle, #5374E7 0%, #77B9F5 100%)"
+        background: "radial-gradient(circle, #5374E7 0%, #77B9F5 100%)",
+        borderRadius: "0 35px 35px 35px",
+        width: 664, height: 464,
+        justifyContent: "center",
+        boxShadow: "5px 10px 20px 0 rgba(0,0,0,0.5)"
       }}
       {...other}
     >
@@ -238,6 +241,7 @@ function TabPanel(props: TabPanelProps) {
                 borderRadius: "20px",
                 backgroundColor: "rgba(255,255,255,0.1)",
                 boxShadow: "5px 10px 20px 0 rgba(0,0,0,0.17)",
+
               }}>
                 <p className={style.tempLabprops}>{moment(x.date).format("dddd")}</p>
                 <p className={style.tempLabprops}>{moment(x.date).format("h:mm")}</p>
@@ -402,32 +406,25 @@ function App() {
                 borderRadius: "25px",
                 background: "radial-gradient(circle, #5374E7 0%, #77B9F5 100%",
               }}>
-               <StepperTemp></StepperTemp>
+                <StepperTemp></StepperTemp>
 
               </Card>
             </div>
 
 
-            <div style={{
-              boxShadow: "5px 10px 20px 0 rgba(0,0,0,0.5)",
-              borderRadius: "35px",
-              background: "radial-gradient(circle, #5374E7 0%, #77B9F5 100%)",
-              marginTop:"25px"
-            }}>
-              <Box sx={{ width: 664, height: 464 }} style={{ backgroundColor: "none", alignItems: "center" }}>
-                <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
-                  <AntTabs value={value} onChange={handleChange} >
-                    <Tab label="This week" id={`simple-tab-0`} value={0} />
-                    <Tab label="This month" id={`simple-tab-1`} value={1} />
-                  </AntTabs>
-                </Box>
-                <TabPanel value={value} index={0} dataWeatherCity={dataWeatherCity || []} activeCity={activeCity || null}>
+            <Box style={{ backgroundColor: "none", alignItems: "center", }}>
 
-                </TabPanel>
+              <AntTabs value={value} onChange={handleChange} >
+                <Tab label="This week" id={`simple-tab-0`} value={0} />
+                <Tab label="This month" id={`simple-tab-1`} value={1} />
+              </AntTabs>
+
+              <TabPanel value={value} index={0} dataWeatherCity={dataWeatherCity || []} activeCity={activeCity || null}>
+
+              </TabPanel>
 
 
-              </Box>
-            </div>
+            </Box>
 
 
 
