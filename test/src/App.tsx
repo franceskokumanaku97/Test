@@ -1,6 +1,6 @@
 import { makeStyles } from '@material-ui/core';
 import AddBoxOutlinedIcon from '@mui/icons-material/AddBoxOutlined';
-import { Box, Card, CardContent, InputAdornment, styled, Tab, Tabs, TextField } from '@mui/material';
+import { Box, Card, CardContent, InputAdornment, Paper, styled, Tab, Tabs, TextField } from '@mui/material';
 import moment from 'moment';
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
@@ -48,7 +48,27 @@ const CssTextField = styled(TextField)({
 });
 
 const useStyle = makeStyles({
+  /* width */
+  '::-webkit-scrollbar': {
+    width: "10px"
+  }
+  ,
+  /* Track */
+  '::-webkit-scrollbar-track': {
+    background: "#f1f1f1",
+  }
+  ,
+  /* Handle */
+  '::-webkit-scrollbar-thumb': {
+    background: "#888",
+  },
+
+  /* Handle on hover */
+  '::-webkit-scrollbar-thumb:hover': {
+    background: "#555",
+  },
   root: {
+
 
   },
 
@@ -230,30 +250,46 @@ function TabPanel(props: TabPanelProps) {
       }}
       {...other}
     >
+
       {value === 0 ? (
-        dataWeatherCity !== null && dataWeatherCity?.map((el: IWeather) =>
-          el.listTemPerH.map((x: IlistTemPerH) => (
-            <>
-              <CardContent sx={{
-                margin: "20px",
-                display: "flex", flexFlow: "column wrap",
-                alignItems: "center",
-                borderRadius: "20px",
-                backgroundColor: "rgba(255,255,255,0.1)",
-                boxShadow: "5px 10px 20px 0 rgba(0,0,0,0.17)",
+        <>
+          <Paper style={{
+            display: "flex",
+            overflowY: "auto",
+            flexFlow: "column wrap",
+            flex: "10%",
+            alignItems: "center",
+            background: "radial-gradient(circle, #5374E7 0%, #77B9F5 100%)",
+            borderRadius: "0 35px 35px 35px",
+            width: 664, height: 464,
+            justifyContent: "center",
+            boxShadow: "5px 10px 20px 0 rgba(0,0,0,0.5)"
+          }}>
+            {dataWeatherCity !== null && dataWeatherCity?.map((el: IWeather) =>
+              el.listTemPerH.map((x: IlistTemPerH) => (
+                <>
+                  <CardContent sx={{
+                    margin: "20px",
+                    display: "flex", flexFlow: "column wrap",
+                    alignItems: "center",
+                    borderRadius: "20px",
+                    backgroundColor: "rgba(255,255,255,0.1)",
+                    boxShadow: "5px 10px 20px 0 rgba(0,0,0,0.17)",
 
-              }}>
-                <p className={style.tempLabprops}>{moment(x.date).format("dddd")}</p>
-                <p className={style.tempLabprops}>{moment(x.date).format("h:mm")}</p>
-                <p className={style.datpropsabprops}>{x.temp}</p>
-                <img style={{ height: "103px", width: "90px" }} src={`http://openweathermap.org/img/w/${el.icon}.png`}></img>
+                  }}>
+                    <p className={style.tempLabprops}>{moment(x.date).format("dddd")}</p>
+                    <p className={style.tempLabprops}>{moment(x.date).format("h:mm")}</p>
+                    <p className={style.datpropsabprops}>{x.temp}</p>
+                    <img style={{ height: "103px", width: "90px" }} src={`http://openweathermap.org/img/w/${el.icon}.png`}></img>
 
-              </CardContent>
-            </>
-          ))
+                  </CardContent>
+                </>
+              ))
 
-        )
+            )}
+          </Paper>
 
+        </>
       ) : <>
         <CardContent sx={{
           marginTop: "10px", display: "flex", flexFlow: "column wrap", alignItems: "center",
@@ -412,7 +448,7 @@ function App() {
             </div>
 
 
-            <Box style={{ backgroundColor: "none", alignItems: "center",marginTop:"25px" }}>
+            <Box style={{ backgroundColor: "none", alignItems: "center", marginTop: "25px" }}>
 
               <AntTabs value={value} onChange={handleChange} >
                 <Tab label="This week" id={`simple-tab-0`} value={0} />
