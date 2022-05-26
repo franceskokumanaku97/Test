@@ -27,8 +27,7 @@ const useStyle = makeStyles({
 
     },
     cityLabprops: {
-        height: "36px",
-        width: "98px",
+        
         color: "#FFFFFF",
         fontFamily: "Poppins",
         fontSize: "26px",
