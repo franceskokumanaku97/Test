@@ -192,6 +192,22 @@ const useStyle = makeStyles({
     fontWeight: 300,
     letterSpacing: 0,
     lineHeight: "18px",
+  },
+
+  mainTab: {
+    display: "flex",
+    overflowY: "auto",
+    flexFlow: "column wrap",
+    flex: "10%",
+    alignItems: "center",
+    background: "radial-gradient(circle, #5374E7 0%, #77B9F5 100%)",
+    borderRadius: "0 35px 35px 35px",
+    width: 664, height: 464,
+    justifyContent: "center",
+    boxShadow: "5px 10px 20px 0 rgba(0,0,0,0.5)",
+    '#simple-tabpanel-1': {
+      borderRadius: "35px",
+    }
   }
 
 });
@@ -199,7 +215,10 @@ const useStyle = makeStyles({
 
 
 const AntTabs = styled(Tabs)({
+
+  '& .MuiTabs-root': { width: "fit-content", },
   ".MuiButtonBase-root": { textTransform: "none", },
+
   '& .MuiTabs-indicator': {
 
   },
@@ -236,18 +255,7 @@ function TabPanel(props: TabPanelProps) {
       hidden={value !== index}
       id={`simple-tabpanel-${index}`}
       aria-labelledby={`simple-tab-${index}`}
-      style={{
-        display: "flex",
-        overflowY: "auto",
-        flexFlow: "column wrap",
-        flex: "10%",
-        alignItems: "center",
-        background: "radial-gradient(circle, #5374E7 0%, #77B9F5 100%)",
-        borderRadius: "0 35px 35px 35px",
-        width: 664, height: 464,
-        justifyContent: "center",
-        boxShadow: "5px 10px 20px 0 rgba(0,0,0,0.5)"
-      }}
+      className={ style.mainTab }
       {...other}
     >
 
@@ -450,7 +458,7 @@ function App() {
 
             <Box style={{ backgroundColor: "none", alignItems: "center", marginTop: "25px" }}>
 
-              <AntTabs value={value} onChange={handleChange} >
+              <AntTabs value={value} onChange={handleChange} sx={{ borderRadius: "35px 35px 0 0", boxShadow: "5px 10px 20px 0 rgb(0 0 0 / 17%)", width: "fit-content" }}>
                 <Tab label="This week" id={`simple-tab-0`} value={0} />
                 <Tab label="This month" id={`simple-tab-1`} value={1} />
               </AntTabs>
@@ -458,7 +466,7 @@ function App() {
               <TabPanel value={value} index={0} dataWeatherCity={dataWeatherCity || []} activeCity={activeCity || null}>
 
               </TabPanel>
-
+              
 
             </Box>
 
